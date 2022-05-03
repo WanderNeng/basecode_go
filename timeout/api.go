@@ -10,7 +10,7 @@ import (
 
 func CmdTimeOut(cmd string, ts time.Duration) {
 	now := time.Now()
-	exe := exec.Command("sh", "-c", "timesleep10")
+	exe := exec.Command("sh", "-c", "time sleep 10")
 
 	exec.Command("sh", cmd)
 
@@ -20,15 +20,16 @@ func CmdTimeOut(cmd string, ts time.Duration) {
 	exe.Stdout = &stdout
 
 	exe.SysProcAttr = &syscall.SysProcAttr{
-		ParentProcess: 10,
+		ParentProcess: 10, //for windows todo
+		//Setpgid:true, //for linux
 	}
 	var finish = make(chan struct{}, 1)
-
+	//todo: time.After使用需要了解开启和关闭
 	go func() {
 		select {
 		case <-finish:
 		case <-time.After(5 * time.Second):
-			//syscall.Kill(-exe.Process.Pid, syscall.SIGKILL)
+			//syscall.Kill(-exe.Process.Pid, syscall.SIGKILL)  for unix
 		}
 	}()
 	err := exe.Run()
