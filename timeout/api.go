@@ -20,8 +20,8 @@ func CmdTimeOut(cmd string, ts time.Duration) {
 	exe.Stdout = &stdout
 
 	exe.SysProcAttr = &syscall.SysProcAttr{
-		ParentProcess: 10, //for windows todo
-		//Setpgid:true, //for linux
+		//ParentProcess: 10, //for windows todo
+		Setpgid: true, //for linux
 	}
 	var finish = make(chan struct{}, 1)
 	//todo: time.After使用需要了解开启和关闭
