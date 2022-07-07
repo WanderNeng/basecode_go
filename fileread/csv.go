@@ -21,9 +21,6 @@ func CsvReadByline(path string) {
 			fmt.Println("eof")
 			break
 		}
-		if len(record) != 1 {
-			continue
-		}
 		fmt.Println(record[0])
 	}
 }
@@ -34,6 +31,8 @@ func CsvWriteByline(path string) {
 		return
 	}
 	defer file.Close()
+	//追加写
+	file.Seek(0, io.SeekEnd)
 	br := csv.NewWriter(file)
 	err = br.Write([]string{"vid", "1"})
 	if err != nil {
